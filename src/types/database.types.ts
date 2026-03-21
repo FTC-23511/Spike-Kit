@@ -15,6 +15,11 @@ export interface Database {
           name: string
           team_number: number | null
           location: string | null
+          email: string | null
+          phone: string | null
+          kit_summary: string | null
+          shipping_method: string | null
+          notes: string | null
           created_at: string
         }
         Insert: {
@@ -22,6 +27,11 @@ export interface Database {
           name: string
           team_number?: number | null
           location?: string | null
+          email?: string | null
+          phone?: string | null
+          kit_summary?: string | null
+          shipping_method?: string | null
+          notes?: string | null
           created_at?: string
         }
         Update: {
@@ -29,6 +39,11 @@ export interface Database {
           name?: string
           team_number?: number | null
           location?: string | null
+          email?: string | null
+          phone?: string | null
+          kit_summary?: string | null
+          shipping_method?: string | null
+          notes?: string | null
           created_at?: string
         }
       }
