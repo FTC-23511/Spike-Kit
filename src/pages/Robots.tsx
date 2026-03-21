@@ -106,53 +106,14 @@ const Robots = () => {
             <Users className="w-6 h-6 text-foreground" />
           </div>
           <h1 className="text-3xl font-display font-bold text-foreground tracking-tighter shadow-sm">
-            PROTECTED: Robots & Schools
+            PRIVATE: Donor & Robot Database
           </h1>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-3">
             <Card className="border-spike-border shadow-soft">
-              <CardHeader>
-                <CardTitle className="text-xl">Add New Entity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleCreateEntity} className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Name (Robot or School)</label>
-                    <Input
-                      placeholder="e.g. Iron Solvers"
-                      value={newEntityName}
-                      onChange={(e) => setNewEntityName(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Team Number (Optional)</label>
-                    <Input
-                      type="number"
-                      placeholder="e.g. 1234"
-                      value={newTeamNumber}
-                      onChange={(e) => setNewTeamNumber(e.target.value)}
-                    />
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? (
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    ) : (
-                      <Plus className="w-4 h-4 mr-2" />
-                    )}
-                    Add Entity
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="lg:col-span-2">
-            <Card className="border-spike-border shadow-soft">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-xl">Existing Entities</CardTitle>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-spike-border mb-4">
+                <CardTitle className="text-xl">Donor Records</CardTitle>
                 {hasAccess && (
                   <Button
                     variant="ghost"
@@ -160,15 +121,16 @@ const Robots = () => {
                     onClick={() => setHasAccess(false)}
                     className="text-muted-foreground hover:text-foreground"
                   >
-                    Lock Section
+                    Lock Database
                   </Button>
                 )}
               </CardHeader>
               <CardContent>
                 {!hasAccess ? (
-                  <form onSubmit={handlePasswordSubmit} className="space-y-4 py-8 max-w-sm mx-auto">
-                    <div className="text-center space-y-2 mb-4">
-                      <p className="text-sm text-muted-foreground">This section is private. Please enter the password to view entities.</p>
+                  <form onSubmit={handlePasswordSubmit} className="space-y-4 py-12 max-w-sm mx-auto">
+                    <div className="text-center space-y-2 mb-6">
+                      <p className="text-lg font-medium">Access Restricted</p>
+                      <p className="text-sm text-muted-foreground">Please enter the administrative password to view donor information.</p>
                     </div>
                     <div className="flex gap-2">
                       <Input
@@ -187,25 +149,25 @@ const Robots = () => {
                   </div>
                 ) : entities.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground">
-                    No entities found. Add your first robot or school above!
+                    No donor records found.
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-spike-border">
-                          <th className="text-left py-3 px-4 font-medium">Name</th>
-                          <th className="text-left py-3 px-4 font-medium">Team #</th>
-                          <th className="text-left py-3 px-4 font-medium">Created</th>
+                        <tr className="border-b border-spike-border bg-muted/30">
+                          <th className="text-left py-3 px-4 font-semibold">Donor Name</th>
+                          <th className="text-left py-3 px-4 font-semibold">Organization / Team</th>
+                          <th className="text-left py-3 px-4 font-semibold">Date Registered</th>
                         </tr>
                       </thead>
                       <tbody>
                         {entities.map((entity) => (
-                          <tr key={entity.id} className="border-b border-spike-border last:border-0 hover:bg-white/50 transition-colors">
+                          <tr key={entity.id} className="border-b border-spike-border last:border-0 hover:bg-muted/50 transition-colors">
                             <td className="py-3 px-4 font-medium">{entity.name}</td>
-                            <td className="py-3 px-4 text-muted-foreground">{entity.team_number || "-"}</td>
-                            <td className="py-3 px-4 text-xs text-muted-foreground">
-                              {new Date(entity.created_at).toLocaleDateString()}
+                            <td className="py-3 px-4 text-muted-foreground">{entity.location || entity.team_number || "Individual"}</td>
+                            <td className="py-3 px-4 text-xs text-muted-foreground italic">
+                              {new Date(entity.created_at).toLocaleDateString()} at {new Date(entity.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </td>
                           </tr>
                         ))}
@@ -215,7 +177,6 @@ const Robots = () => {
                 )}
               </CardContent>
             </Card>
-          </div>
         </div>
       </div>
     </div>
