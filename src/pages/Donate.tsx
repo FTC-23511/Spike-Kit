@@ -275,35 +275,21 @@ const DonatePage = () => {
       }
 
       // 2. Submit to Supabase
-      // First, create or find the entity (donor)
-      const { data: entityData, error: entityError } = await supabase
+      // Create the entity (donor) with all fields
+      const { error: entityError } = await supabase
         .from("entities")
         .insert({
           name: `${data.firstName} ${data.lastName}`,
           location: data.organization || "Individual",
           team_number: data.organization && !isNaN(parseInt(data.organization)) ? parseInt(data.organization) : null,
-        })
-        .select()
-        .single();
-
-      if (entityError) throw entityError;
-
-      // Then, create the report (donation details)
-      const { error: reportError } = await supabase
-        .from("reports")
-        .insert({
-          entity_id: entityData.id,
-          data: {
-            email: data.email,
-            phone: data.phone || "",
-            kitSummary: kitSummary,
-            shippingMethod: data.shippingPreference,
-            wantsDonorRecognition: data.wantsDonorRecognition,
-          } as any,
-          notes: data.additionalNotes || "",
+          email: data.email,
+          phone: data.phone || null,
+          kit_summary: kitSummary.join("; "),
+          shipping_method: data.shippingPreference,
+          notes: data.additionalNotes || null,
         });
 
-      if (reportError) throw reportError;
+      if (entityError) throw entityError;
 
       setIsSubmitted(true);
       toast({ title: "Donation Registered!", description: "Thank you for your generous donation. We'll be in touch soon." });
