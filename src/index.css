@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary SPIKE Yellow palette */
+    --spike-yellow: 50 100% 68%;
+    --spike-cream: 53 80% 84%;
+    --spike-gold: 51 100% 47%;
+    --spike-border: 50 100% 36%;
+    --spike-light: 53 83% 93%;
+    --spike-soft: 52 84% 74%;
+    
+    /* Semantic tokens */
+    --background: 53 83% 93%;
+    --foreground: 45 30% 15%;
+
+    --card: 53 80% 84%;
+    --card-foreground: 45 30% 15%;
+
+    --popover: 53 83% 93%;
+    --popover-foreground: 45 30% 15%;
+
+    --primary: 51 100% 47%;
+    --primary-foreground: 45 30% 10%;
+
+    --secondary: 50 100% 68%;
+    --secondary-foreground: 45 30% 15%;
+
+    --muted: 53 80% 84%;
+    --muted-foreground: 45 20% 40%;
+
+    --accent: 52 84% 74%;
+    --accent-foreground: 45 30% 15%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 50 100% 36%;
+    --input: 50 100% 36%;
+    --ring: 51 100% 47%;
+
+    --radius: 0.75rem;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(180deg, rgba(252, 249, 222, 0.2) 0%, rgba(245, 233, 134, 0.2) 100%);
+    --gradient-card: linear-gradient(180deg, rgba(248, 242, 180, 0.2) 0%, #f5e986 100%);
+    --gradient-accent: linear-gradient(180deg, #ffe75c 0%, #f8f2b4 50%, #fcf9de 100%);
+    --gradient-button: linear-gradient(180deg, #ffe75c 0%, #f2ce00 100%);
+    
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -2px rgba(185, 157, 0, 0.15);
+    --shadow-card: 0 8px 30px -4px rgba(185, 157, 0, 0.2);
+    --shadow-elevated: 0 20px 50px -10px rgba(185, 157, 0, 0.25);
+
+    /* Sidebar tokens */
+    --sidebar-background: 53 83% 93%;
+    --sidebar-foreground: 45 30% 15%;
+    --sidebar-primary: 51 100% 47%;
+    --sidebar-primary-foreground: 45 30% 10%;
+    --sidebar-accent: 52 84% 74%;
+    --sidebar-accent-foreground: 45 30% 15%;
+    --sidebar-border: 50 100% 36%;
+    --sidebar-ring: 51 100% 47%;
+  }
+
+  .dark {
+    --background: 45 30% 8%;
+    --foreground: 53 83% 93%;
+
+    --card: 45 25% 12%;
+    --card-foreground: 53 83% 93%;
+
+    --popover: 45 25% 12%;
+    --popover-foreground: 53 83% 93%;
+
+    --primary: 51 100% 47%;
+    --primary-foreground: 45 30% 10%;
+
+    --secondary: 50 40% 20%;
+    --secondary-foreground: 53 83% 93%;
+
+    --muted: 45 20% 18%;
+    --muted-foreground: 53 40% 60%;
+
+    --accent: 50 60% 25%;
+    --accent-foreground: 53 83% 93%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 50 40% 25%;
+    --input: 50 40% 25%;
+    --ring: 51 100% 47%;
+
+    --sidebar-background: 45 30% 8%;
+    --sidebar-foreground: 53 83% 93%;
+    --sidebar-primary: 51 100% 47%;
+    --sidebar-primary-foreground: 45 30% 10%;
+    --sidebar-accent: 50 60% 25%;
+    --sidebar-accent-foreground: 53 83% 93%;
+    --sidebar-border: 50 40% 25%;
+    --sidebar-ring: 51 100% 47%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background: var(--gradient-hero);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    color: hsl(50 100% 36%);
+  }
+  
+  .bg-gradient-hero {
+    background-color: hsl(53 83% 93%);
+  }
+  
+  .bg-gradient-card {
+    background: var(--gradient-card);
+  }
+  
+  .bg-gradient-accent {
+    background: var(--gradient-accent);
+  }
+  
+  .bg-gradient-button {
+    background: var(--gradient-button);
+  }
+  
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+}
