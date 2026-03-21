@@ -156,18 +156,24 @@ const Robots = () => {
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-spike-border bg-muted/30">
-                          <th className="text-left py-3 px-4 font-semibold">Donor Name</th>
-                          <th className="text-left py-3 px-4 font-semibold">Organization / Team</th>
-                          <th className="text-left py-3 px-4 font-semibold">Date Registered</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Donor Name</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Organization / Team</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Email</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Phone</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Kits</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Date Registered</th>
                         </tr>
                       </thead>
                       <tbody>
                         {entities.map((entity) => (
                           <tr key={entity.id} className="border-b border-spike-border last:border-0 hover:bg-muted/50 transition-colors">
-                            <td className="py-3 px-4 font-medium">{entity.name}</td>
-                            <td className="py-3 px-4 text-muted-foreground">{entity.location || entity.team_number || "Individual"}</td>
-                            <td className="py-3 px-4 text-xs text-muted-foreground italic">
-                              {new Date(entity.created_at).toLocaleDateString()} at {new Date(entity.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            <td className="py-3 px-4 font-medium whitespace-nowrap">{entity.name}</td>
+                            <td className="py-3 px-4 text-muted-foreground whitespace-nowrap">{entity.location || entity.team_number || "Individual"}</td>
+                            <td className="py-3 px-4 text-sm whitespace-nowrap"><a href={`mailto:${entity.email}`} className="text-primary hover:underline">{entity.email || "-"}</a></td>
+                            <td className="py-3 px-4 text-sm whitespace-nowrap">{entity.phone || "-"}</td>
+                            <td className="py-3 px-4 text-sm max-w-xs truncate" title={entity.kit_summary || ""}>{entity.kit_summary || "-"}</td>
+                            <td className="py-3 px-4 text-xs text-muted-foreground italic whitespace-nowrap">
+                              {new Date(entity.created_at).toLocaleDateString()}
                             </td>
                           </tr>
                         ))}
