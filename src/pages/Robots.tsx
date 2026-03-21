@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Loader2, Plus, Users } from "lucide-react";
+import { Loader2, Plus, Users, Star, Trash2 } from "lucide-react";
 
 type Entity = Database['public']['Tables']['entities']['Row'];
 
@@ -28,6 +28,7 @@ const Robots = () => {
           const { data, error } = await supabase
             .from("entities")
             .select("*")
+            .order("is_starred", { ascending: false })
             .order("created_at", { ascending: false });
 
           if (!isMounted) return;
@@ -51,6 +52,44 @@ const Robots = () => {
       isMounted = false;
     };
   }, [hasAccess]);
+
+  const handleToggleStar = async (entity: Entity) => {
+    try {
+      const { error } = await supabase
+        .from("entities")
+        .update({ is_starred: !entity.is_starred })
+        .eq("id", entity.id);
+      
+      if (error) throw error;
+      
+      setEntities(prev => prev.map(e => e.id === entity.id ? { ...e, is_starred: !e.is_starred } : e).sort((a, b) => {
+        if (a.is_starred !== b.is_starred) return a.is_starred ? -1 : 1;
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }));
+      
+      toast.success(entity.is_starred ? "Unstarred" : "Starred");
+    } catch (error: any) {
+      toast.error("Error updating record: " + error.message);
+    }
+  };
+
+  const handleDeleteDonor = async (id: string, name: string) => {
+    if (!window.confirm(`Are you sure you want to delete the donor record for "${name}"? This cannot be undone.`)) return;
+    
+    try {
+      const { error } = await supabase
+        .from("entities")
+        .delete()
+        .eq("id", id);
+      
+      if (error) throw error;
+      
+      setEntities(prev => prev.filter(e => e.id !== id));
+      toast.success("Donor record removed");
+    } catch (error: any) {
+      toast.error("Error deleting record: " + error.message);
+    }
+  };
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,18 +194,28 @@ const Robots = () => {
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-spike-border bg-muted/30">
-                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Donor Name</th>
-                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Organization / Team</th>
-                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Email</th>
-                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Phone</th>
-                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Kits</th>
-                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Date Registered</th>
+                        <tr className="border-b border-spike-border bg-muted/30 text-xs text-muted-foreground uppercase tracking-wider">
+                          <th className="w-10 py-3 px-4"></th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap text-foreground">Donor Name</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap text-foreground">Organization</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap text-foreground">Email</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap text-foreground">Phone</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap text-foreground">Kits</th>
+                          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap text-foreground">Date</th>
+                          <th className="w-10 py-3 px-4"></th>
                         </tr>
                       </thead>
                       <tbody>
                         {entities.map((entity) => (
-                          <tr key={entity.id} className="border-b border-spike-border last:border-0 hover:bg-muted/50 transition-colors">
+                          <tr key={entity.id} className={`border-b border-spike-border last:border-0 hover:bg-muted/50 transition-colors ${entity.is_starred ? 'bg-primary/5' : ''}`}>
+                            <td className="py-3 px-2">
+                              <button 
+                                onClick={() => handleToggleStar(entity)}
+                                className={`p-1 rounded-full transition-colors ${entity.is_starred ? 'text-yellow-500 fill-yellow-500' : 'text-muted-foreground hover:text-yellow-500'}`}
+                              >
+                                <Star className="w-4 h-4" />
+                              </button>
+                            </td>
                             <td className="py-3 px-4 font-medium whitespace-nowrap">{entity.name}</td>
                             <td className="py-3 px-4 text-muted-foreground whitespace-nowrap">{entity.location || entity.team_number || "Individual"}</td>
                             <td className="py-3 px-4 text-sm whitespace-nowrap"><a href={`mailto:${entity.email}`} className="text-primary hover:underline">{entity.email || "-"}</a></td>
@@ -174,6 +223,14 @@ const Robots = () => {
                             <td className="py-3 px-4 text-sm max-w-xs truncate" title={entity.kit_summary || ""}>{entity.kit_summary || "-"}</td>
                             <td className="py-3 px-4 text-xs text-muted-foreground italic whitespace-nowrap">
                               {new Date(entity.created_at).toLocaleDateString()}
+                            </td>
+                            <td className="py-3 px-2 text-right">
+                              <button 
+                                onClick={() => handleDeleteDonor(entity.id, entity.name)}
+                                className="p-1 text-muted-foreground hover:text-destructive rounded-full transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
                             </td>
                           </tr>
                         ))}
