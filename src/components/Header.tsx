@@ -47,9 +47,6 @@ const Header = () => {
           <Link to="/our-impact" className="text-foreground/80 hover:text-foreground transition-colors font-medium">
             Our Impact
           </Link>
-          <Link to="/robots" className="text-foreground/80 hover:text-foreground transition-colors font-medium">
-            Robots
-          </Link>
         </nav>
         
         <div className="hidden sm:flex items-center gap-3">
@@ -87,9 +84,6 @@ const Header = () => {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/our-impact" className="w-full">Our Impact</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/robots" className="w-full">Manage Robots</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
