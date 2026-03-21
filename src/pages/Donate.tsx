@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Package, CheckCircle2, Calculator, Plus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 
 const CONDITIONS = [
   { value: "sealed", label: "Sealed", mult: 0.90 },
@@ -262,20 +263,52 @@ const DonatePage = () => {
     };
 
     try {
-      const response = await fetch(MAKE_WEBHOOK_URL, {
+      // 1. Submit to Make Webhook (keep existing logic)
+      const webhookResponse = await fetch(MAKE_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        throw new Error(`Submission failed: ${response.statusText} (${response.status})`);
+      if (!webhookResponse.ok) {
+        console.warn(`Webhook submission failed: ${webhookResponse.statusText}`);
       }
+
+      // 2. Submit to Supabase
+      // First, create or find the entity (donor)
+      const { data: entityData, error: entityError } = await supabase
+        .from("entities")
+        .insert({
+          name: `${data.firstName} ${data.lastName}`,
+          location: data.organization || "Individual",
+          team_number: data.organization && !isNaN(parseInt(data.organization)) ? parseInt(data.organization) : null,
+        })
+        .select()
+        .single();
+
+      if (entityError) throw entityError;
+
+      // Then, create the report (donation details)
+      const { error: reportError } = await supabase
+        .from("reports")
+        .insert({
+          entity_id: entityData.id,
+          data: {
+            email: data.email,
+            phone: data.phone || "",
+            kitSummary: kitSummary,
+            shippingMethod: data.shippingPreference,
+            wantsDonorRecognition: data.wantsDonorRecognition,
+          } as any,
+          notes: data.additionalNotes || "",
+        });
+
+      if (reportError) throw reportError;
 
       setIsSubmitted(true);
       toast({ title: "Donation Registered!", description: "Thank you for your generous donation. We'll be in touch soon." });
     } catch (err) {
-      console.error("Sheet submission error:", err);
+      console.error("Submission error:", err);
       toast({ 
         title: "Submission Error", 
         description: err instanceof Error ? err.message : "Something went wrong. Please try again.", 
