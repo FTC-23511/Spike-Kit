@@ -93,7 +93,7 @@ const Robots = () => {
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "SamosasAreSkibidi") {
+    if (password === import.meta.env.VITE_ROBOTS_PASSWORD) {
       setHasAccess(true);
       toast.success("Access granted");
     } else {
