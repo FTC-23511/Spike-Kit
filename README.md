@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+### Supabase Project: https://supabase.com/dashboard/project/xlfhgstmblhqfiekxptu/editor/17538
 
 ## Project info
 
