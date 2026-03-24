@@ -71,7 +71,7 @@ const DonateFundsPage = () => {
                 </p>
                 <Button asChild variant="outline" size="sm" className="text-[10px] sm:text-xs md:text-sm">
                   <a 
-                    href="https://hcb.hackclub.com/donations/start/spike-forward" 
+                    href="https://hcb.hackclub.com/donations/start/ftc23511" 
                     target="_blank" 
                     rel="noopener noreferrer"
                   >
