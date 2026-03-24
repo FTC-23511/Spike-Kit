@@ -32,7 +32,7 @@ const DonateFundsPage = () => {
             <CardContent className="space-y-3 sm:space-y-4 md:space-y-6 p-3 sm:p-4 md:p-6 pt-0">
               <div className="w-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] rounded-lg overflow-hidden border border-border">
                 <iframe
-                  src="https://hcb.hackclub.com/donations/start/spike-forward"
+                  src="https://hcb.hackclub.com/donations/start/ftc23511"
                   style={{ border: "none" }}
                   name="donateFrame"
                   scrolling="yes"
